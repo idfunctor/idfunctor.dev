@@ -2,6 +2,8 @@ module Pages.About (mkAbout) where
 
 import Prelude
 import Components.Page as Page
+import Components.Tags (tsxTags)
+import Next.Head as N
 import React.Basic.DOM as R
 import React.Basic.Hooks as React
 
@@ -11,7 +13,14 @@ mkAbout = do
   where
   render =
     React.fragment
-      [ R.div
+      [ N.head
+          { children:
+              [ R.title
+                  { children: [ R.text "Next.js with Purescript Example" ]
+                  }
+              ]
+          }
+      , R.div
           { className: "max-w-5xl flex mx-auto my-12"
           , children:
               [ R.div
@@ -62,6 +71,7 @@ mkAbout = do
                               [ R.text "Production grade React applications that scale. The world's leading companies use Next.js to build server-rendered applications, static websites, and more."
                               ]
                           }
+                      , React.element tsxTags { tags: [ "one" ] }
                       ]
                   }
               , R.div

@@ -14,3 +14,4 @@
 /.spago/
 /*.log
 /.parcel-cache
+.DS_Store
