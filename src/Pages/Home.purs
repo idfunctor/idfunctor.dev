@@ -1,4 +1,4 @@
-module Pages.Home (Props, mkHome, getServerSideProps) where
+module Pages.Home (mkHome, getServerSideProps) where
 
 import Prelude
 import Affjax as AX
@@ -16,9 +16,9 @@ import Effect.Uncurried (EffectFn1, mkEffectFn1)
 import React.Basic.DOM as R
 import React.Basic.Hooks as React
 
-type Props
-  = { header :: String
-    }
+type Props =
+  { header :: String
+  }
 
 mkHome :: Page.Component Props
 mkHome = do
@@ -35,7 +35,7 @@ mkHome = do
           { className: "max-w-5xl flex mx-auto my-12"
           , children:
               [ R.div
-                  { className: "mr-1 text-gray-100 w-3/5 shadow-2xl bg-gray-800 p-12 text-left"
+                  { className: "mr-1 text-slate-100 w-3/5 shadow-2xl bg-slate-800 p-12 text-left"
                   , children:
                       [ R.h1
                           { className: "text-3xl font-bold"
@@ -71,7 +71,7 @@ fetchData :: forall ctx. ctx -> Aff Props
 fetchData _ = do
   res <- AX.request (AX.defaultRequest { url = Config.apiEndpoint <> "/posts/1", method = Left GET, responseFormat = ResponseFormat.string })
   liftEffect $ Console.log $ either AX.printError _.body res
-  pure $ { header: "Home" }
+  pure { header: "Home" }
 
 getServerSideProps :: forall ctx. EffectFn1 ctx (Promise { props :: Props })
 getServerSideProps =

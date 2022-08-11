@@ -3,9 +3,9 @@ module Next.Head where
 import Prim.Row (class Union)
 import React.Basic.Hooks (JSX, ReactComponent, element)
 
-type Props_head
-  = ( children :: Array JSX
-    )
+type Props_head =
+  ( children :: Array JSX
+  )
 
 head ::
   forall attrs attrs_.
