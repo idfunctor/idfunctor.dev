@@ -1,39 +1,27 @@
-module Pages.App (Props, mkApp) where
+module Pages.App (mkApp) where
 
 import Prelude
 import Components.Loading (mkLoading)
 import Components.Navigation (navigation)
-import Components.Page as Page
 import Context.Settings (mkSettingsProvider)
 import Control.Monad.Reader (runReaderT)
 import Data.Tuple.Nested ((/\))
+import Effect (Effect)
 import Effect.Uncurried (EffectFn1, mkEffectFn1)
-import Next.Head as N
-import React.Basic.DOM as R
+import Next.App as N
 import React.Basic.Hooks as React
 
-type Props props
-  = { "Component" :: Page.Component props
-    , pageProps :: props
-    }
-
-mkApp :: forall props. EffectFn1 (Props props) React.JSX
-mkApp =
-  mkEffectFn1 \props -> do
-    context /\ settingsProvider <- mkSettingsProvider
-    loading <- mkLoading
-    component <- runReaderT props."Component" { settings: context }
-    pure
-      $ settingsProvider
-      $ React.fragment
-          [ N.head
-              { children:
-                  [ R.title
-                      { children: [ R.text "Next.js with Purescript Example" ]
-                      }
-                  ]
-              }
-          , loading unit
-          , navigation
-          , component props.pageProps
-          ]
+mkApp :: forall props. Effect (EffectFn1 (N.AppProps props) React.JSX)
+mkApp = do
+  context /\ settingsProvider <- mkSettingsProvider
+  loading <- mkLoading
+  pure
+    $ mkEffectFn1 \props -> do
+        component <- runReaderT props."Component" { settings: context }
+        pure
+          $ settingsProvider
+          $ React.fragment
+              [ loading unit
+              , navigation
+              , component props.pageProps
+              ]
